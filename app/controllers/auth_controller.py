@@ -31,3 +31,29 @@ def tela_login(request: Request):
         {"request": request}
     )
 
+# Rota para criar um usuario no banco de dados
+@router.post("/cadastro")
+def fazer_usuario(
+    request: Request,
+    nome: str = Form(...),
+    email: str = Form(...),
+    senha: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    # Verificar se o usuário já existe
+    usuario_existente = db.query(Usuario).filter_by(email=email).first()
+    if usuario_existente:
+        return templates.TemplateResponse(
+            request,
+            "auth/cadastro.html",
+            {"request": request, "erro": "Este email já está cadastrado."}
+        )
+
+    # Criar o novo usuário
+    nova_senha = hash_senha(senha)
+    novo_usuario = Usuario(nome=nome, email=email, senha_hash=nova_senha)
+    db.add(novo_usuario)
+    db.commit()
+
+    # Redirecionar para a tela de login
+    return RedirectResponse(url="/auth/login?cadastro=successo", status_code=status.HTTP_302_FOUND)
