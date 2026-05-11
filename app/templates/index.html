@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema MVC | Bem-vindo</title>
+    <style>
+        :root { --primary: #ffcc00; --bg: #ffffff; --dark: #1a1a1a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        nav { display: flex; justify-content: space-between; padding: 20px 5%; align-items: center; background: #fff; }
+        .logo { font-weight: 800; font-size: 1.5rem; }
+        .nav-links a { text-decoration: none; color: var(--dark); margin-left: 20px; font-weight: 500; }
+        .btn-login { border: 2px solid var(--primary); padding: 8px 20px; border-radius: 5px; }
+        
+        header { 
+            height: 80vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+            background: linear-gradient(180deg, #fff 0%, #fff9e6 100%);
+            padding: 0 10%;
+        }
+        
+        h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.1; }
+        span { background: var(--primary); padding: 0 10px; }
+        p { font-size: 1.2rem; color: #555; max-width: 600px; margin-bottom: 30px; }
+        
+        .cta-main { 
+            background: var(--dark); color: var(--primary); 
+            padding: 15px 40px; border-radius: 30px; 
+            text-decoration: none; font-weight: bold; font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+        .cta-main:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Sistema MVC<span>.</span></div>
+        <div class="nav-links">
+            <a href="/auth/login" class="btn-login">Entrar</a>
+            <a href="/auth/cadastro" style="background: var(--primary); padding: 10px 20px; border-radius: 5px;">Cadastrar</a>
+        </div>
+    </nav>
+    <header>
+        <h1>Aumente sua produtividade <span>agora</span>.</h1>
+        <p>A ferramenta completa para organizar seus projetos e otimizar seu tempo. Simples, rápido e eficiente.</p>
+        <a href="/auth/cadastro" class="cta-main">Começar Gratuitamente</a>
+    </header>
+</body>
+</html>

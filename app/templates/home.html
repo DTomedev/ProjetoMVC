@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Home</title>
+    <style>
+        :root { --primary: #ffcc00; --sidebar: #1a1a1a; --content-bg: #f8f9fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body { display: flex; height: 100vh; background: var(--content-bg); }
+        
+        /* Sidebar */
+        aside { width: 250px; background: var(--sidebar); color: #fff; padding: 30px 20px; display: flex; flex-direction: column; }
+        .nav-item { padding: 15px; color: #bbb; text-decoration: none; border-radius: 8px; margin-bottom: 5px; }
+        .nav-item.active { background: var(--primary); color: #000; font-weight: bold; }
+        .logout { margin-top: auto; color: #ff4444; text-decoration: none; padding: 10px; }
+
+        /* Main Content */
+        main { flex: 1; padding: 40px; overflow-y: auto; }
+        .welcome-header { margin-bottom: 30px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
+        .card h3 { font-size: 0.9rem; color: #888; margin-bottom: 10px; }
+        .card p { font-size: 1.8rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <aside>
+        <h2 style="margin-bottom: 40px;">Painel<span>.</span></h2>
+        <a href="#" class="nav-item active">Início</a>
+        <a href="#" class="nav-item">Meus Projetos</a>
+        <a href="#" class="nav-item">Configurações</a>
+        <a href="/logout" class="logout">Sair da conta</a>
+    </aside>
+
+    <main>
+        <div class="welcome-header">
+            <h1>Olá, {{ nome_usuario }}! 👋</h1>
+            <p>Aqui está o que está acontecendo hoje.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="card">
+                <h3>Tarefas Pendentes</h3>
+                <p>12</p>
+            </div>
+            <div class="card">
+                <h3>Projetos Ativos</h3>
+                <p>4</p>
+            </div>
+            <div class="card">
+                <h3>Mensagens</h3>
+                <p>7</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 30px; border-left: none;">
+            <h3>Últimas Atividades</h3>
+            <div style="border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px;">
+                <p style="font-size: 1rem; font-weight: normal; color: #555;">Você atualizou o projeto "Amarelo Moderno" há 2 horas.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
