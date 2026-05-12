@@ -57,3 +57,80 @@ def fazer_usuario(
 
     # Redirecionar para a tela de login
     return RedirectResponse(url="/auth/login?cadastro=successo", status_code=status.HTTP_302_FOUND)
+
+
+@router.post("/login")
+def login(
+    request: Request,
+    email: str = Form(...),
+    senha: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Processa o login e define o cookie JWT.
+
+    Fluxo:
+    1. Busca o usuário pelo email
+    2. Verifica a senha com bcrypt
+    3. Gera o token JWT
+    4. Salva o token em um cookie HttpOnly
+    5. Redireciona para a página principal
+    """
+
+    # Busca o usuário no banco pelo email
+    usuario = db.query(Usuario).filter(
+        Usuario.email == email
+    ).first()
+
+    # Verifica usuário E senha em passos separados para evitar
+    # "timing attacks" (atacante deduz se o email existe pelo tempo de resposta)
+    senha_correta = (
+        usuario is not None and
+        verificar_senha(senha, usuario.senha_hash)
+    )
+
+    if not senha_correta:
+        return templates.TemplateResponse(
+            "auth/login.html",
+            {
+                "request": request,
+                "erro": "E-mail ou senha incorretos."
+            },
+            status_code=401
+        )
+
+    if not usuario.ativo:
+        return templates.TemplateResponse(
+            "auth/login.html",
+            {
+                "request": request,
+                "erro": "Usuário inativo. Contate o administrador."
+            },
+            status_code=403
+        )
+
+    # Dados que ficarão no payload do JWT
+    # "sub" (subject) é a convenção JWT para identificar o usuário
+    token_data = {
+        "sub": usuario.email,
+        "nome": usuario.nome,
+        "role": usuario.role,
+        "id": usuario.id
+    }
+
+    token = criar_token(token_data)
+
+    # Cria a resposta de redirecionamento
+    response = RedirectResponse(url="/", status_code=302)
+
+    # Define o cookie com o token JWT
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,    # JavaScript NÃO pode ler este cookie (proteção XSS)
+        max_age=3600,     # expira em 1 hora (em segundos)
+        samesite="lax",   # proteção básica contra CSRF
+        # secure=True     # ativar em produção (exige HTTPS)
+    )
+
+    return response
