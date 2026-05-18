@@ -56,9 +56,9 @@ def fazer_usuario(
     db.commit()
 
     # Redirecionar para a tela de login
-    return RedirectResponse(url="/auth/login?cadastro=successo", status_code=status.HTTP_302_FOUND)
+    return RedirectResponse(url="/auth/login?cadastro=successo", status_code=302)
 
-
+#Rota de login 
 @router.post("/login")
 def login(
     request: Request,
@@ -78,9 +78,7 @@ def login(
     """
 
     # Busca o usuário no banco pelo email
-    usuario = db.query(Usuario).filter(
-        Usuario.email == email
-    ).first()
+    usuario = db.query(Usuario).filter(Usuario.email == email).first()
 
     # Verifica usuário E senha em passos separados para evitar
     # "timing attacks" (atacante deduz se o email existe pelo tempo de resposta)
@@ -91,6 +89,7 @@ def login(
 
     if not senha_correta:
         return templates.TemplateResponse(
+            request,
             "auth/login.html",
             {
                 "request": request,
@@ -101,6 +100,7 @@ def login(
 
     if not usuario.ativo:
         return templates.TemplateResponse(
+            request,
             "auth/login.html",
             {
                 "request": request,
@@ -133,4 +133,11 @@ def login(
         # secure=True     # ativar em produção (exige HTTPS)
     )
 
+    return response
+
+#Rota para Sair/logout - remove o cookie do token JWT
+@router.get("/logout")
+def sair():
+    response = RedirectResponse(url="/", status_code=302)
+    response.delete_cookie(key="access_token")
     return response
