@@ -140,6 +140,12 @@
     <div class="container">
         <h1>Entrar</h1>
 
+        {% if request.query_params.get('cadastro') == 'successo' %}
+            <p class="error-msg" style="background-color: #d4edda; color: #155724; border-color: #c3e6cb;">
+                Cadastro realizado com sucesso! Faça login para continuar.
+            </p>
+        {% endif %}
+        
         <form action="/auth/login" method="post">
             {% if error %}
                 <p class="error-msg">{{ error }}</p>
@@ -157,7 +163,6 @@
 
             <button type="submit">Entrar</button>
         </form>
-
         <p>Ainda não tem conta? <a href="/auth/cadastro">Criar Conta</a></p>
     </div>
 
