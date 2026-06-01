@@ -21,10 +21,7 @@ UPLOAD_DIR = "app/static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)  # cria a pasta se não existir
 
 
-# ============================================================
 # LISTAGEM
-# ============================================================
-
 @router.get("/")
 def listar_produtos(
     request: Request,
@@ -58,10 +55,8 @@ def listar_produtos(
     )
 
 
-# ============================================================
-# CADASTRO
-# ============================================================
 
+# CADASTRO
 @router.get("/novo")
 def form_novo_produto(
     request: Request,
@@ -87,7 +82,7 @@ async def criar_produto(
     request: Request,
     nome: str          = Form(...),
     preco: float       = Form(...),
-    estoque_atual: int = Form(...),
+    estoque: int = Form(...),
     categoria_id: int  = Form(0),   # 0 = sem categoria
     imagem: UploadFile = File(None), # None = campo opcional
     db: Session        = Depends(get_db),
@@ -108,7 +103,7 @@ async def criar_produto(
                 "categorias": categorias,
                 "erro":       "Já existe um produto com este nome.",
                 "valores":    {"nome": nome, "preco": preco,
-                               "estoque_atual": estoque_atual,
+                               "estoque": estoque,
                                "categoria_id": categoria_id}
             },
             status_code=400
@@ -120,7 +115,7 @@ async def criar_produto(
     produto = Produto(
         nome          = nome,
         preco         = preco,
-        estoque_atual = estoque_atual,
+        estoque = estoque,
         categoria_id  = categoria_id or None,  # 0 vira NULL no banco
         imagem_path   = imagem_path,
     )
@@ -187,7 +182,7 @@ async def editar_produto(
     request: Request,
     nome: str          = Form(...),
     preco: float       = Form(...),
-    estoque_atual: int = Form(...),
+    estoque: int = Form(...),
     categoria_id: int  = Form(0),
     imagem: UploadFile = File(None),
     db: Session        = Depends(get_db),
@@ -228,7 +223,7 @@ async def editar_produto(
 
     editando.nome          = nome
     editando.preco         = preco
-    editando.estoque_atual = estoque_atual
+    editando.estoque = estoque
     editando.categoria_id  = categoria_id or None
 
     db.commit()
@@ -236,10 +231,8 @@ async def editar_produto(
     return RedirectResponse(url=f"/produtos/{produto_id}?editado=ok", status_code=302)
 
 
-# ============================================================
-# DESATIVAR
-# ============================================================
 
+# DESATIVAR
 @router.post("/{produto_id}/desativar")
 def desativar_produto(
     produto_id: int,
@@ -255,10 +248,8 @@ def desativar_produto(
     return RedirectResponse(url="/produtos?desativado=ok", status_code=302)
 
 
-# ============================================================
-# FUNÇÕES AUXILIARES DE IMAGEM
-# ============================================================
 
+# FUNÇÕES AUXILIARES DE IMAGEM
 async def _salvar_imagem(imagem: UploadFile | None):
     """
     Salva o arquivo enviado em /static/uploads/ e retorna

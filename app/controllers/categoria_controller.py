@@ -17,10 +17,7 @@ router = APIRouter(prefix="/categorias", tags=["Categorias"])
 templates = Jinja2Templates(directory="app/templates")
 
 
-# ============================================================
 # LISTAGEM
-# ============================================================
-
 @router.get("/")
 def listar_categorias(
     request: Request,
@@ -44,11 +41,7 @@ def listar_categorias(
         }
     )
 
-
-# ============================================================
 # CADASTRO
-# ============================================================
-
 @router.get("/nova")
 def form_nova_categoria(
     request: Request,
@@ -99,10 +92,7 @@ def criar_categoria(
     return RedirectResponse(url="/categorias?criado=ok", status_code=302)
 
 
-# ============================================================
 # EDIÇÃO
-# ============================================================
-
 @router.get("/{categoria_id}/editar")
 def form_editar_categoria(
     categoria_id: int,
@@ -170,10 +160,8 @@ def editar_categoria(
     return RedirectResponse(url="/categorias?editado=ok", status_code=302)
 
 
-# ============================================================
-# TOGGLE ATIVO
-# ============================================================
 
+# TOGGLE ATIVO
 @router.post("/{categoria_id}/toggle-ativo")
 def toggle_ativo(
     categoria_id: int,

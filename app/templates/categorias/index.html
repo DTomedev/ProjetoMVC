@@ -45,10 +45,10 @@
                     Filtramos em Python para contar apenas os ativos.
                 -->
                 <td>
-                    {{ c.produtos | selectattr('ativo') | list | length }}
+                    {{ c.produtos | selectattr('ativa') | list | length }}
                 </td>
 
-                <td>{{ "Ativa" if c.ativo else "Inativa" }}</td>
+                <td>{{ "Ativa" if c.ativa else "Inativa" }}</td>
 
                 <td>
                     <a href="/categorias/{{ c.id }}/editar">Editar</a>
@@ -57,7 +57,7 @@
                           method="post"
                           style="display:inline">
                         <button type="submit">
-                            {{ "Desativar" if c.ativo else "Ativar" }}
+                            {{ "Desativar" if c.ativa else "Ativar" }}
                         </button>
                     </form>
                 </td>

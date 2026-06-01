@@ -23,7 +23,7 @@
         <tr><td><strong>Preço</strong></td>
             <td>R$ {{ "%.2f"|format(produto.preco) }}</td></tr>
         <tr><td><strong>Estoque atual</strong></td>
-            <td>{{ produto.estoque_atual }}</td></tr>
+            <td>{{ produto.estoque }}</td></tr>
     </table>
 
     {% if usuario.role == 'admin' %}
